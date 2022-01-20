@@ -1,108 +1,80 @@
 package ru.netology;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RadioTest {
-    @Test
-    public void shouldSetTheDesiredStation() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(7);
 
-        assertEquals(7, radio.getCurrentStation());
+    Radio radio = new Radio();
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, 1",
+            "10, 0",
+            "-1, 0",
+            "11, 1"
+    })
+    public void shouldPressNextStation(int stationNumber, int expected) {
+        radio.setCurrentStation(stationNumber);
+        radio.pressNextStation();
+        assertEquals(expected, radio.getCurrentStation());
     }
 
-    @Test
-    public void shouldEnlargeStation() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(5);
-        radio.nextCurrentStation();
-
-        assertEquals(6, radio.getCurrentStation());
+    @ParameterizedTest
+    @CsvSource({
+            "10, 9",
+            "0, 10"
+    })
+    public void shouldPressPrevStation(int stationNumber, int expected) {
+        radio.setCurrentStation(stationNumber);
+        radio.pressPrevStation();
+        assertEquals(expected, radio.getCurrentStation());
     }
 
-    @Test
-    public void shouldReduceStation() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(3);
-        radio.prevCurrentStation();
-
-        assertEquals(2, radio.getCurrentStation());
-    }
-
-    @Test
-    public void shouldIncreaseStationIfLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(9);
-        radio.nextCurrentStation();
-
-        assertEquals(0, radio.getCurrentStation());
-    }
-
-    @Test
-    public void shouldReduceStationIfLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(0);
-        radio.prevCurrentStation();
-
-        assertEquals(9, radio.getCurrentStation());
-    }
-
-    @Test
-    public void shouldIncreaseTheStationOverTheLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(25);
-        radio.nextCurrentStation();
-
-        assertEquals(0, radio.getCurrentStation());
-    }
-
-    @Test
-    public void shouldReduceTheStationOverTheLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentStation(-25);
-        radio.prevCurrentStation();
-
-        assertEquals(9, radio.getCurrentStation());
+    @ParameterizedTest
+    @CsvSource({
+            "101, 0",
+            "-1, 100",
+            "50, 50"
+    })
+    public void shouldSetCurrentVolume(int volumeLevel, int expected) {
+        radio.setCurrentVolume(volumeLevel);
+        assertEquals(expected, radio.getCurrentVolume());
     }
 
 
-    @Test
-    public void shouldIncreaseSound() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(4);
-        radio.increaseCurrentVolume();
-
-        assertEquals(5, radio.getCurrentVolume());
+    @ParameterizedTest
+    @CsvSource({
+            "5, 6",
+            "100, 0"
+    })
+    public void shouldPressVolumeUp(int volumeLevel, int expected) {
+        radio.setCurrentVolume(volumeLevel);
+        radio.pressVolumeUp();
+        assertEquals(expected, radio.getCurrentVolume());
     }
 
-    @Test
-    public void shouldReduceSound() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(7);
-        radio.decreaseCurrentVolume();
-
-        assertEquals(6, radio.getCurrentVolume());
+    @ParameterizedTest
+    @CsvSource({
+            "5, 4",
+            "0, 100"
+    })
+    public void shouldPressVolumeDown(int volumeLevel, int expected) {
+        radio.setCurrentVolume(volumeLevel);
+        radio.pressVolumeDown();
+        assertEquals(expected, radio.getCurrentVolume());
     }
 
-    @Test
-    public void shouldSoundIncreaseOverTheLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(11);
-        radio.increaseCurrentVolume();
-
-        assertEquals(10, radio.getCurrentVolume());
+    @ParameterizedTest
+    @CsvSource({
+            "1, 0",
+            "100, 99",
+            "10, 9"
+    })
+    public void shouldCreateStationsWithLimits(int stationsLimit, int expected) {
+        Radio radio = new Radio(stationsLimit);
+        assertEquals(expected, radio.getMaxRadioStation());
     }
-
-    @Test
-    public void shouldSoundReductionOverTheLimit() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(-1);
-        radio.decreaseCurrentVolume();
-
-        assertEquals(0, radio.getCurrentVolume());
-    }
-
-
 }
