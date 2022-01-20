@@ -8,9 +8,9 @@ jobs: # какие задачи делаем
 
     steps: # какие шаги выполняем
       - uses: actions/checkout@v2 # выкачиваем репо
-      - name: Set up JDK 8
+      - name: Set up JDK 11
         uses: actions/setup-java@v1 # устанавливаем JDK
         with:
-          java-version: 8 # версия для установки
+          java-version: 11 # версия для установки
       - name: Build with Maven
         run: mvn -B -e verify # запускаем Maven
